@@ -52,7 +52,7 @@ void registerUser() {
     ifstream inputfile;
     ofstream outputfile;
 
-    while (true) { // Loop to retry registration until successful or user exits
+    while (true) {
         cout << "\nRegister:\n";
         cout << "Enter a username (no spacing, type 'exit' to go back): ";
         cin.ignore();
@@ -68,7 +68,6 @@ void registerUser() {
             continue;
         }
 
-        // Open the file to check for existing usernames
         inputfile.open("credentials.txt");
         bool userExists = false;
 
@@ -87,11 +86,9 @@ void registerUser() {
             continue;
         }
 
-        // If the username is valid and not taken
         cout << "Enter a password (no spacing, type 'exit' to go back): ";
         getline(cin, password);
 
-        // Check if the user wants to exit
         if (password == "exit") {
             cout << "Returning to the main menu...\n";
             return;
@@ -102,13 +99,12 @@ void registerUser() {
             continue;
         }
 
-        // Save the credentials to a file
         outputfile.open("credentials.txt", ios::app);
         if (outputfile.is_open()) {
             outputfile << username << " " << password << endl;
             outputfile.close();
             cout << "Registration successful!\n";
-            break; // Exit the loop after successful registration
+            break; 
         } else {
             cout << "Error: Unable to save credentials. Please try again.\n";
         }
@@ -119,13 +115,12 @@ bool loginUser() {
     string username, password, fileUsername, filePassword;
     ifstream inputfile;
 
-    while (true) { // Loop to retry login until successful or user exits
+    while (true) {
         cout << "\nLogin:\n";
         cout << "Enter your username (type 'exit' to go back): ";
         cin.ignore();
         getline(cin, username);
 
-        // Check if the user wants to exit
         if (username == "exit") {
             cout << "Returning to the main menu...\n";
             return false;
@@ -134,13 +129,11 @@ bool loginUser() {
         cout << "Enter your password (type 'exit' to go back): ";
         getline(cin, password);
 
-        // Check if the user wants to exit
         if (password == "exit") {
             cout << "Returning to the main menu...\n";
             return false;
         }
 
-        // Read the stored credentials from the file
         inputfile.open("credentials.txt");
         if (inputfile.is_open()) {
             bool loginSuccessful = false;
