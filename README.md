@@ -8,7 +8,6 @@
 3. **DO NOT DELETE ANY FILES EVER!!**
 4. Make sure the write your name on the top of your code or file
    Example:
-   =============================================================
    - //Programmer: MAHAVIGNA JYOTHI ESWERA A/L K MURTHY
    - //USM Email: mahavigna@student.usm.my
    - //GitHub Username: Mahavigna
