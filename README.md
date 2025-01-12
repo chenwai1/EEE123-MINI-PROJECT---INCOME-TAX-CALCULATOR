@@ -9,10 +9,11 @@
 4. Make sure the write your name on the top of your code or file
    Example:
    =============================================================
-   //Programmer: MAHAVIGNA JYOTHI ESWERA A/L K MURTHY
-   //USM Email: mahavigna@student.usm.my
-   //GitHub Username: Mahavigna
-   //Matric No.: 23301624
+   - //Programmer: MAHAVIGNA JYOTHI ESWERA A/L K MURTHY
+   - //USM Email: mahavigna@student.usm.my
+   - //GitHub Username: Mahavigna
+   - //Matric No.: 23301624
+   
 ## SOP When coding
 1. Copy the github link to your VSCode (Clone Repository)
 2. Make a new file or edit your **own** file
