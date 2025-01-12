@@ -9,7 +9,8 @@
                 "-Wconversion",
                 "-fdiagnostics-color=always",
                 "-g",
-                "${workspaceFolder}/*.cpp",
+                "${workspaceFolder}/main.cpp",
+                "${workspaceFolder}/TaxRelief.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
