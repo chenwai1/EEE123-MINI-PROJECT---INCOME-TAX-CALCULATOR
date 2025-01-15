@@ -78,7 +78,7 @@ public:
             return;
         }
 
-        outFile << "===================== TAX SUMMARY =====================\n";
+        outFile << "==================== PERSONAL DETAILS ====================\n";
         outFile << std::setw(20) << std::left << "Name" << ": " << name << "\n";
         outFile << std::setw(20) << "IC No." << ": " << icNo << "\n";
         outFile << std::setw(20) << "Assessment Type" << ": ";
