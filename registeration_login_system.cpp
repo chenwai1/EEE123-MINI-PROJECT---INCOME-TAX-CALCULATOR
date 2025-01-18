@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <limits>
 
 using namespace std;
 
@@ -28,11 +29,13 @@ void mainMenu() {
         cout << "1. Register\n2. Login\n3. Exit\n";
         cout << "Enter your choice (1, 2, or 3): ";
         cin >> choice;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         if (choice == 1) {
             registerUser();
         } else if (choice == 2) {
-            if (loginUser()) {;
+            if (loginUser()) {
+                cout << "Login successful. Proceeding to the calculator...\n";
                 break;
             } else {
                 cout << "Login failed. Please try again.\n";
@@ -40,6 +43,10 @@ void mainMenu() {
         } else if (choice == 3) {
             cout << "Thanks for using the calculator. Goodbye!\n";
             break;
+        } else if (cin.fail()) {
+            cout << "Invalid choice. Please enter 1, 2, or 3.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
         } else {
             cout << "Invalid choice. Please enter 1, 2, or 3.\n";
         }
@@ -58,7 +65,6 @@ void registerUser() {
     while (true) {
         cout << "\nRegister:\n";
         cout << "Enter a username (no spacing, type 'exit' to go back): ";
-        cin.ignore();
         getline(cin, username);
 
         if (username == "exit") {
@@ -121,7 +127,6 @@ bool loginUser() {
     while (true) {
         cout << "\nLogin:\n";
         cout << "Enter your username (type 'exit' to go back): ";
-        cin.ignore();
         getline(cin, username);
 
         if (username == "exit") {
