@@ -1,3 +1,8 @@
+//Programmer: CHEW CHEN WAI
+//USM Email: chenwai16@student.usm.my
+//GitHub Username: chenwai1
+//Matric No.: 23301622
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -6,7 +11,6 @@ using namespace std;
 
 void registerUser();
 bool loginUser();
-void calculator();
 void mainMenu();
 bool hasSpaces(const string& str);
 
@@ -28,8 +32,7 @@ void mainMenu() {
         if (choice == 1) {
             registerUser();
         } else if (choice == 2) {
-            if (loginUser()) {
-                calculator();
+            if (loginUser()) {;
                 break;
             } else {
                 cout << "Login failed. Please try again.\n";
@@ -157,39 +160,5 @@ bool loginUser() {
             cout << "Error: Unable to open the credentials file.\n";
             return false;
         }
-    }
-}
-
-void calculator() {
-    int choice;
-    double num1, num2;
-
-    cout << "\nCalculator Menu:\n";
-    cout << "1. Addition\n2. Subtraction\n3. Multiplication\n4. Division\n";
-    cout << "Enter your choice: ";
-    cin >> choice;
-
-    cout << "Enter two numbers: ";
-    cin >> num1 >> num2;
-
-    switch (choice) {
-        case 1:
-            cout << "Result: " << num1 + num2 << endl;
-            break;
-        case 2:
-            cout << "Result: " << num1 - num2 << endl;
-            break;
-        case 3:
-            cout << "Result: " << num1 * num2 << endl;
-            break;
-        case 4:
-            if (num2 != 0) {
-                cout << "Result: " << num1 / num2 << endl;
-            } else {
-                cout << "Error: Division by zero is not allowed.\n";
-            }
-            break;
-        default:
-            cout << "Invalid choice.\n";
     }
 }
