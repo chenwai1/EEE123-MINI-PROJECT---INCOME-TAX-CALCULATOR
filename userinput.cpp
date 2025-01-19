@@ -6,9 +6,9 @@
 #include <iostream>
 #include <regex>
 #include <string>
+#include <unordered_set>
 #include <fstream>
-#include <sstream>
-#include <cctype>
+#include <sstream> // For string stream operations
 
 using namespace std;
 
@@ -22,7 +22,7 @@ struct User {
 };
 
 // Function declarations
-void GettingDetails(User& user);
+void GettingDetails(User& user, const string& initialEmail);
 string capitalize(const string& input);
 void saveToFile(const User& user);
 bool isReturningUser(const string& email, User& user);
@@ -42,7 +42,7 @@ string capitalize(const string& input) {
 void saveToFile(const User& user) {
     ofstream outputFile("userDetails.txt", ios::app); // Open in append mode
     if (outputFile.is_open()) {
-        outputFile << user.name << "|" << user.ic << "|" << user.phoneNo << "|"
+        outputFile << user.name << "|" << user.ic << "|" << user.phoneNo << "|" 
                    << user.email << "|" << user.job << "|" << user.company << endl;
         outputFile.close();
         cout << "\nUser details saved successfully!\n";
@@ -53,29 +53,29 @@ void saveToFile(const User& user) {
 
 // Function to check if a user with the given email exists
 bool isReturningUser(const string& email, User& user) {
-    ifstream inputFile("userDetails.txt");
+    ifstream inputFile("userDetails.txt"); // Open the file for reading
     string line;
 
     if (inputFile.is_open()) {
         while (getline(inputFile, line)) {
             stringstream ss(line);
-            string name, ic, phoneNo, fileEmail, job, company;
+            string name, ic, phoneNo, fileEmail, fileJob, fileCompany;
 
             // Parse the line into user details
             getline(ss, name, '|');
             getline(ss, ic, '|');
             getline(ss, phoneNo, '|');
             getline(ss, fileEmail, '|');
-            getline(ss, job, '|');
-            getline(ss, company, '|');
+            getline(ss, fileJob, '|');
+            getline(ss, fileCompany, '|');
 
-            if (fileEmail == email) {
+            if (fileEmail == email) { // If email matches
                 user.name = name;
                 user.ic = ic;
                 user.phoneNo = phoneNo;
                 user.email = fileEmail;
-                user.job = job;
-                user.company = company;
+                user.job = fileJob;
+                user.company = fileCompany;
 
                 inputFile.close();
                 return true;
@@ -83,18 +83,19 @@ bool isReturningUser(const string& email, User& user) {
         }
         inputFile.close();
     }
-    return false;
+    return false; // Email not found
 }
 
 // Function to get and validate user details
-void GettingDetails(User& user) {
+void GettingDetails(User& user, const string& initialEmail) {
     cout << "\n==========================================================\n";
     cout << "              <Part 1. Personal Details>\n";
     cout << "==========================================================\n";
-    cout << "Data can be changed after finishing filling the personal details, allowing the user to update their information if necessary.\n";
+    cout << "This is only for statistical purposes.\n";
+    cout << "Data can be changed after finishing filling the personal details, allowing the user to update their information if necessary\n";
 
     // Getting User's Name
-    cout << "Name: ";
+    cout << "Full name: ";
     getline(cin, user.name);
     user.name = capitalize(user.name);
 
@@ -125,8 +126,11 @@ void GettingDetails(User& user) {
         getline(cin, user.email);
         if (!regex_match(user.email, emailPattern)) {
             cout << "Invalid Email. Please Try Again.\n";
+        } else if (user.email != initialEmail) {
+            cout << "The entered email does not match the initial email (" << initialEmail << ").\n";
+            cout << "Please re-enter the same email or confirm this is correct.\n";
         }
-    } while (!regex_match(user.email, emailPattern));
+    } while (!regex_match(user.email, emailPattern) || user.email != initialEmail);
 
     cout << "Job title: ";
     getline(cin, user.job);
@@ -139,13 +143,12 @@ void GettingDetails(User& user) {
     cout << "\nYour details have been collected successfully!\n";
 }
 
-// Function to update user details
 void updateDetails(User& user) {
     cout << "\n==========================================================\n";
     cout << "              <Update Your Details>\n";
     cout << "==========================================================\n";
     cout << "Select the field you want to update:\n";
-    cout << "1. Name\n";
+    cout << "1. Full name\n";
     cout << "2. Identity Card (IC) No.\n";
     cout << "3. Phone No.\n";
     cout << "4. Email\n";
@@ -162,7 +165,7 @@ void updateDetails(User& user) {
     do {
         cout << "\nEnter your choice: ";
         cin >> choice;
-        cin.ignore();
+        cin.ignore(); // Ignore trailing newline from cin
 
         switch (choice) {
             case 1:
@@ -228,7 +231,6 @@ void updateDetails(User& user) {
     cout << "\nYour details have been updated successfully!\n";
 }
 
-// Function to rewrite the file with updated user details
 void rewriteFile(const User& updatedUser) {
     ifstream inputFile("userDetails.txt");
     ofstream tempFile("temp.txt");
@@ -274,10 +276,13 @@ int main() {
     cout << "              <Welcome to the User System>\n";
     cout << "==========================================================\n";
 
+    // Ask for the user's email to check if they are returning
     cout << "Please enter your email: ";
     getline(cin, email);
 
+    // Check if the email exists in the file
     if (isReturningUser(email, user)) {
+        // Returning user
         cout << "\nWelcome back, " << user.name << "!\n";
         cout << "Here are your details:\n";
         cout << "Name: " << user.name << endl;
@@ -287,21 +292,33 @@ int main() {
         cout << "Job title: " << user.job << endl;
         cout << "Company name: " << user.company << endl;
 
+} else {
+    cout << "\nIt seems you are a new user. Let's register your details.\n";
+    GettingDetails(user, email);
+    saveToFile(user); // Save the new user's details to the file
+}
+
+    // Update user details
         char choice;
         cout << "\nWould you like to update your details? (y/n): ";
-        cin >> choice;
-        cin.ignore();
 
-        if (tolower(choice) == 'y') {
-            updateDetails(user);
-            rewriteFile(user);
+         while (true) {
+            cin >> choice;
+            cin.ignore(); // To ignore the newline from previous input
+
+            if (tolower(choice) == 'y') {
+                updateDetails(user);
+                rewriteFile(user);
+                break;
+            } else if (tolower(choice) == 'n') {
+                cout << "No changes made to your details.\n";
+                break;
+            } else {
+                // Handle invalid input
+                cout << "Invalid choice! Please enter 'y' for Yes or 'n' for No: ";
+            }
         }
-    } else {
-        cout << "\nIt seems you are a new user. Let's register your details.\n";
-        GettingDetails(user);
-        saveToFile(user);
-    }
 
-    cout << "\nThank you for using the system. Goodbye!\n";
-    return 0;
+cout << "\nThank you for using the system. Goodbye!\n";
+return 0;
 }
