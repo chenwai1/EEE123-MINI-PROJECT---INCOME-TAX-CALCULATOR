@@ -12,8 +12,6 @@
 #include <algorithm> // For std::max
 # include <set>
 
-
-
 using namespace std;
 
 // Structure to store user details

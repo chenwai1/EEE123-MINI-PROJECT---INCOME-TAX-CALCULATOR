@@ -3,6 +3,7 @@
 #include "income.hpp"
 #include "register_sys.hpp"
 #include "Indvidual_Relief.hpp"
+#include "userinput.hpp"
 
 // Global variable definitions
 UserDetails user;
@@ -10,7 +11,6 @@ string religionName;
 string marital_status;
 string DisabilityType;
 int AssesmentType = 0; // 0 = Not chosen, 1 = Individual, 2 = Joint
-
 
 int main() {
     displayMainMenu(); // Start the program by displaying the main menu

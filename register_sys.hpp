@@ -7,5 +7,7 @@
 bool loginUser();
 bool hasSpaces(const string& str);
 void registerUser(); 
+void mainMenu();
 
 #endif
+

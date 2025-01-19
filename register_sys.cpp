@@ -1,16 +1,47 @@
+//Programmer: CHEW CHEN WAI
+//USM Email: chenwai16@student.usm.my
+//GitHub Username: chenwai1
+//Matric No.: 23301622
+
 #include "register_sys.hpp"
+
+void mainMenu() {
+    int choice;
+
+    while (true) {
+        cout << "\nWelcome to the INCOME TAX CALCULATOR!\n";
+        cout << "__________________________________________________________________________________\n";
+        cout << "1. Register\n2. Login\n3. Exit\n";
+        cout << "Enter your choice (1, 2, or 3): ";
+        cin >> choice;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        if (choice == 1) {
+            registerUser();
+        } else if (choice == 2) {
+            if (loginUser()) {
+                cout << "Login successful. Proceeding to the calculator...\n";
+                break;
+            } else {
+                cout << "Login failed. Please try again.\n";
+            }
+        } else if (choice == 3) {
+            cout << "Thanks for using the calculator. Goodbye!\n";
+            break;
+        } else if (cin.fail()) {
+            cout << "Invalid choice. Please enter 1, 2, or 3.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        } else {
+            cout << "Invalid choice. Please enter 1, 2, or 3.\n";
+        }
+    }
+}
+
 
 // Function to check if a string contains spaces
 bool hasSpaces(const string& str) {
     return str.find(' ') != string::npos;
-}
-
-// Function to trim leading and trailing spaces from a string
-string trim(const string& str) {
-    size_t first = str.find_first_not_of(' ');
-    if (first == string::npos) return ""; // String is all spaces
-    size_t last = str.find_last_not_of(' ');
-    return str.substr(first, last - first + 1);
 }
 
 // Function to handle user registration
@@ -20,7 +51,7 @@ void registerUser() {
     ofstream outputfile;
     bool registrationSuccessful = false;
 
-    do {
+    while (true) {
         // Prompt for username
         cout << "\nRegister:\n";
         cout << "Enter a username (no spacing, type 'exit' to go back): ";
@@ -31,14 +62,11 @@ void registerUser() {
             cout << "Returning to the main menu...\n";
             return;
         }
+
         // Validate username
-        else if (username.empty()) {
-            cout << "\nError: Username cannot be empty. Please try again.\n";
-            continue; 
-        }
-        if (hasSpaces(username)) {
-            cout << "\nError: Username cannot contain spaces. Please try again.\n";
-            continue; 
+        if (hasSpaces(username) || username.empty()) {
+            cout << "Error: Username cannot contain spaces or be empty.\n";
+            continue;
         }
 
         // Check if the username already exists
@@ -56,36 +84,24 @@ void registerUser() {
         }
 
         if (userExists) {
-            cout << "\nThe username already exists. Please choose a different username.\n";
-            continue; // Skip the rest of the loop and reprompt
+            cout << "The username already exists. Please choose a different username.\n";
+            continue;// Skip the rest of the loop and reprompt
         }
 
         // Prompt for password
-        while (true) {
-            cout << "Enter a password (no spacing, type 'exit' to go back): ";
-            getline(cin, password);
+        cout << "Enter a password (no spacing, type 'exit' to go back): ";
+        getline(cin, password);
 
-            // Check if the user wants to exit
-            if (password == "exit") {
-                cout << "Returning to the main menu...\n";
-                return;
-            }
+        // Check if the user wants to exit
+        if (password == "exit") {
+            cout << "Returning to the main menu...\n";
+            return;
+        }
 
-            // Trim leading and trailing spaces from the password
-            password = trim(password);
-
-            // Validate password
-            if (password.empty()) {
-                cout << "\nError: Password cannot be empty. Please try again.\n";
-                continue; // Reprompt for password
-            }
-
-            if (hasSpaces(password)) {
-                cout << "\nError: Password cannot contain spaces. Please try again.\n";
-                continue; // Reprompt for password
-            }
-
-            break; // Exit the password input loop if valid
+        // Validate password
+        if (hasSpaces(password) || password.empty()) {
+            cout << "Error: Password cannot contain spaces or be empty.\n";
+            continue; // Reprompt for password
         }
 
         // Save the credentials to the file
@@ -93,13 +109,15 @@ void registerUser() {
         if (outputfile.is_open()) {
             outputfile << username << " " << password << endl;
             outputfile.close();
-            cout << "Registration successful!\n";
-            registrationSuccessful = true; // Set flag to true to exit the loop
+            cout << "Registration successful!\n"; 
+            break; // Set flag to true to exit the loop
         } else {
             cout << "Error: Unable to save credentials. Please try again.\n";
         }
-    } while (!registrationSuccessful);
+    }
 }
+
+
 // Function to handle user login
 bool loginUser() {
     string username, password, fileUsername, filePassword;
